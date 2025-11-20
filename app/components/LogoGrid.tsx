@@ -10,7 +10,7 @@ const LogoGrid = () => {
   ];
 
   return (
-    <div className="w-full mt-20 px-4">
+    <div className="w-full mt-10 px-4 z-[-1]">
  
       <div 
         className="

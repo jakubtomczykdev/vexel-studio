@@ -128,7 +128,7 @@ export default function App() {
               href={`#${section.id}`}
               onClick={(e) => {
                 e.preventDefault();
-                // Użycie zmemoizowanej funkcji
+     
                 scrollToSection(section.id);
               }}
               className="text-slate-100 hover:text-emerald-400 transition-colors text-md tracking-wide"
@@ -137,7 +137,7 @@ export default function App() {
             </a>
           ))}
           <Button
-            // Cal.com aktywuje się poprzez data-atrybuty, kliknięcie uruchamia też przewijanie do sekcji
+            
             data-cal-link="jakub-tomczyk/30min"
             data-cal-config='{"layout":"month_view"}'
             onClick={() => scrollToSection("contact")}
@@ -337,7 +337,7 @@ export default function App() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            transition={{ duration: 0.5 }}
           >
             <div className="mb-6 md:inline-block hidden">
               <div className="px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 backdrop-blur-sm">
@@ -370,25 +370,42 @@ export default function App() {
         </div>
         
         {/* Scroll Indicator */}
-        <motion.div
-          aria-hidden="true"
-          className="absolute bottom-12 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="w-6 h-10 border border-emerald-500/30 rounded-full flex items-start justify-center p-2">
-            <motion.div
-              className="w-1.5 h-3 bg-emerald-500 rounded-full"
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </div>
-        </motion.div>
+                <motion.div
+  aria-hidden="true"
+
+  className="absolute bottom-0 lg:bottom-18 left-1/2 -translate-x-1/2 z-20 hidden lg:block" 
+  animate={{ y: [0, 10, 0] }}
+  transition={{ duration: 2, repeat: Infinity }}
+>
+  <div className="w-6 h-10 border border-emerald-500/30 rounded-full flex items-start justify-center p-2 ">
+    <motion.div
+      className="w-1.5 h-3 bg-emerald-500 rounded-full"
+      animate={{ y: [0, 12, 0] }}
+      transition={{ duration: 2, repeat: Infinity }}
+    />
+  </div>
+</motion.div>
+
 
       </section>
 
       {/* Services Section */}
-      <section id="services" aria-labelledby="services-heading" className="py-32 relative overflow-hidden">
+      <section id="services" aria-labelledby="services-heading" className="py-31.5 relative overflow-hidden">
+                <motion.div
+  aria-hidden="true"
+
+  className="absolute top-0 lg:bottom-12 left-1/2 -translate-x-1/2 z-20  lg:hidden" 
+  animate={{ y: [0, 10, 0] }}
+  transition={{ duration: 2, repeat: Infinity }}
+>
+  <div className="w-6 h-10 border border-emerald-500/30 rounded-full flex items-start justify-center p-2 ">
+    <motion.div
+      className="w-1.5 h-3 bg-emerald-500 rounded-full"
+      animate={{ y: [0, 12, 0] }}
+      transition={{ duration: 2, repeat: Infinity }}
+    />
+  </div>
+</motion.div>
         {/* Abstract Background Elements */}
         <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center opacity-20">
           <div className="w-[600px] h-[600px] bg-emerald-500/20 rounded-full blur-3xl"></div>
@@ -472,7 +489,7 @@ export default function App() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
+                transition={{ duration: 0.6 }}
                 className="group"
               >
                 <div className="relative p-8 rounded-3xl border border-emerald-500/10 bg-gradient-to-b from-emerald-500/5 to-transparent backdrop-blur-sm hover:border-emerald-500/30 transition-all duration-500 hover:bg-emerald-500/10 h-full">
