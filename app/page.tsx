@@ -1,6 +1,6 @@
 "use client";
 import { getCalApi } from "@calcom/embed-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react"; // Dodano useCallback
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import { Textarea } from "./components/ui/textarea";
@@ -8,50 +8,79 @@ import { Label } from "./components/ui/label";
 // import { VexelLogo } from "./components/VexelLogo";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import CompanyCarousel from "./components/CompanyCarousel";
+import CompanyCarousel from "./components/LogoGrid";
 import { MenuIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 
 export default function App() {
-  
-  useEffect(() => {
-    (async function () {
-      const cal = await getCalApi({ "namespace": "30min" });
-      cal("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
-    })();
-  }, [])
-   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // ----------------------------------------------------
+  // HOOKS (Wszystkie zdefiniowane na najwyższym poziomie)
+  // ----------------------------------------------------
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
+  useEffect(() => {
+  // Ten kod uruchomi się TYLKO na kliencie po pierwszej hydratacji
+  setIsClient(true); 
+}, []);
+
+  // Generowanie losowych cząstek tylko raz przy pierwszym renderowaniu klienta
+  const [particles] = useState(() => 
+    Array.from({ length: 100 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2 + 1,
+      delay: Math.random() * 5,
+    }))
+  );
+
+  // 1. POPRAWKA CAL.COM API: Usunięcie nieprawidłowego 'if (typeof window !== 'undefined')' na zewnątrz
+  useEffect(() => {
+    // Logika wewnątrz useEffect uruchamia się tylko na kliencie.
+    (async function () {
+      try {
+        const cal = await getCalApi({ "namespace": "30min" });
+        cal("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
+      } catch (error) {
+        // Opcjonalna obsługa błędu ładowania Cal.com
+        console.error("Failed to load Cal.com API:", error);
+      }
+    })();
+  }, []); // Pusta tablica zależności: uruchomi się raz po zamontowaniu
+
+  // 2. OPTYMALIZACJA SCROLL: Użycie useCallback dla funkcji przewijania
+  const scrollToSection = useCallback((id: string) => {
+    // Dostęp do 'document' jest bezpieczny, ponieważ ta funkcja jest wywoływana
+    // w reakcji na interakcję użytkownika na kliencie.
+    const element = document.getElementById(id);
+    element?.scrollIntoView({ behavior: "smooth" });
+  }, []); // Brak zależności: funkcja jest memoizowana
+
+  // 3. OBSŁUGA SCROLL (Bez zmian - jest już poprawna)
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+
     window.addEventListener("scroll", handleScroll);
+    
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  // Generate random particles
-  const particles = Array.from({ length: 100 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 2 + 1,
-    delay: Math.random() * 5,
-  }));
-
+  // ----------------------------------------------------
+  // RENDEROWANIE KOMPONENTU
+  // ----------------------------------------------------
   return (
     <div className="min-h-screen bg-black/95 overflow-x-hidden relative">
       {/* Animated Background Particles */}
-      <div aria-hidden="true" className="fixed inset-0 overflow-hidden pointer-events-none">
-        {particles.map((particle) => (
+     
+        {isClient && (
+           <div aria-hidden="true" className="fixed inset-0 overflow-hidden pointer-events-none">
+             {particles.map((particle) => (
           <motion.div
             key={particle.id}
             className="absolute w-1 h-1 bg-emerald-500 rounded-full"
@@ -72,7 +101,10 @@ export default function App() {
             }}
           />
         ))}
+        
+       
       </div>
+        )}
 
       {/* Navigation */}
       <nav
@@ -96,6 +128,7 @@ export default function App() {
               href={`#${section.id}`}
               onClick={(e) => {
                 e.preventDefault();
+                // Użycie zmemoizowanej funkcji
                 scrollToSection(section.id);
               }}
               className="text-slate-100 hover:text-emerald-400 transition-colors text-md tracking-wide"
@@ -104,6 +137,7 @@ export default function App() {
             </a>
           ))}
           <Button
+            // Cal.com aktywuje się poprzez data-atrybuty, kliknięcie uruchamia też przewijanie do sekcji
             data-cal-link="jakub-tomczyk/30min"
             data-cal-config='{"layout":"month_view"}'
             onClick={() => scrollToSection("contact")}
@@ -163,7 +197,7 @@ export default function App() {
     <main>
       {/* Hero Section with Large Abstract Orb */}
       <section id="home" className="relative min-h-screen flex items-start pt-32 overflow-hidden">
-     
+      
         <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
           <motion.div
             className="relative"
@@ -611,7 +645,7 @@ export default function App() {
                         <div className="text-sm text-emerald-400 mb-3 tracking-wider">{project.category}</div>
                         <h3 className="text-3xl sm:text-4xl text-white tracking-tight">{project.title}</h3>
                       </div>
-                      <div className="flex items-center gap-4 mt-4 sm:mt-0">
+                      <div className="flex items-center gap-4 mt-4 sm:mt-0"> {/* Poprawiono literówkę `mt-`4 */}
                         <div className="text-slate-100 text-xl sm:text-2xl font-light self-start sm:self-center">{project.year}</div>
                         <Button variant="outline" className="bg-transparent text-white border-emerald-500/30 hover:bg-emerald-500/10 hover:text-white">
                           Zobacz projekt
@@ -781,8 +815,10 @@ export default function App() {
         </div>
       </section>
       </main>
-      {/* Footer */}
-      <footer className="py-16 border-t border-emerald-500/10 relative">
+      
+      {/* Toast provider jest zwykle umieszczany na najwyższym poziomie aplikacji, ale dla kompletnosci */}
+      {/* <Toaster /> */}
+            <footer className="py-16 border-t border-emerald-500/10 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-3">
@@ -805,3 +841,5 @@ export default function App() {
     </div>
   );
 }
+      
+
