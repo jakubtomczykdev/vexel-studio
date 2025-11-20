@@ -1,5 +1,5 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, {useState} from "react";
+import { motion, Transition } from "framer-motion";
 import CompanyLogo from "./CompanyLogo";
 
 const CompanyCarousel = () => {
@@ -12,12 +12,12 @@ const CompanyCarousel = () => {
 
   const extendedLogos = [...logos, ...logos];
 
-  // 1. Hook do śledzenia rozmiaru ekranu
-  const [isMobile, setIsMobile] = React.useState(false);
+
+  const [isMobile, setIsMobile] = useState(false);
 
   React.useEffect(() => {
     const checkMobile = () => {
-      // Używamy progu 768px (standardowe 'md' w Tailwind)
+
       setIsMobile(window.innerWidth < 768);
     };
 
@@ -27,25 +27,21 @@ const CompanyCarousel = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // 2. Warunkowe Definicje Animacji
-  const duration = isMobile ? 100 : 100; // Krótszy czas animacji (szybsza) na mobile
-  const repeat = isMobile ? 0 : Infinity; // Brak nieskończonego powtarzania na mobile
 
-  const transitionProps = {
+  const duration = isMobile ? 100 : 100; 
+  const repeat = isMobile ? 0 : Infinity; 
+
+  const transitionProps: Transition = {
     ease: "linear",
     duration: duration,
     repeat: repeat,
-    // Dodatkowo, na mobile możemy użyć 'repeatType: "reverse"', aby
-    // animacja wracała na swoje miejsce, zamiast gwałtownie skakać.
+
     repeatType: isMobile ? "reverse" : "loop", 
   };
-  const transition = {
-  duration: 0.8,
-  delay: 0.5,
-}
+
 
   return (
-    <div className="w-full overflow-hidden mt-10"> {/* Komponent jest zawsze widoczny */}
+    <div className="w-full overflow-hidden mt-10">
       <div className="relative w-full h-20">
         <motion.div
           className="absolute left-0 flex"
