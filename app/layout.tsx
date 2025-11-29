@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     locale: "pl_PL",
     images: [
       {
-        url: "/business.png",
+        url: "/logos/business.png",
         width: 1200,
         height: 630,
         alt: "Vexel Studio – Nowoczesne strony internetowe",
