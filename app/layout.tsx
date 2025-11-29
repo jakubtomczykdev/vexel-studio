@@ -39,6 +39,7 @@ export const metadata: Metadata = {
     "Olkusz strony",
     "Kraków strony",
   ],
+  themeColor: '#34D399',
 
 
   openGraph: {
@@ -51,7 +52,7 @@ export const metadata: Metadata = {
     locale: "pl_PL",
     images: [
       {
-        url: "https://www.vexelstudio.pl/og-image.jpg", 
+        url: "/business.png",
         width: 1200,
         height: 630,
         alt: "Vexel Studio – Nowoczesne strony internetowe",

@@ -15,8 +15,8 @@ interface ProjectPageProps {
   };
 }
 
-export default function ProjectPage({ params }: ProjectPageProps) {
-  const project = projects.find((p) => p.slug === params.slug);
+export default async function ProjectPage({ params }: ProjectPageProps) {
+  const project = await projects.find((p) => p.slug === params.slug);
 
   if (!project) {
     notFound();
@@ -71,7 +71,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           <h2 className="text-3xl sm:text-4xl font-bold mb-8 tracking-tight">Podgląd strony</h2>
           <div className="p-4 rounded-3xl border border-emerald-500/20 bg-black/50">
              <div className=" bg-black/30 rounded-2xl flex items-center justify-cente">
-                <Image src={kowalskiImage} width={1500} height={1000} className="rounded-xl" alt="Zdjęcie strony Kowalski & partnerzy"/>
+                <Image src={project.fullPageImage} width={1500} height={1000} className="rounded-xl" alt={`Zdjecie strony ${project.title}`}/>
              </div>
           </div>
         </div>

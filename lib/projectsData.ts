@@ -22,14 +22,14 @@ export const projects = [
         description: "Strona działa jako automatyczny kanał pozyskiwania zapytań, niezależnie od pory dnia i na każdym urządzeniu."
       }
     ],
-    fullPageImage: "/projects/kowalski-full.png"
+    fullPageImage: "/projects/kowalski_preview.png"
   },
   {
     slug: "restauracja-bellovito",
     title: "Restauracja Bellovito",
     category: "E-Commerce",
     year: "2025",
-    href: "#",
+    href: "https://restauracjabellovito.netlify.app/",
     description: "Platforma e-commerce dla restauracji, umożliwiająca łatwe zamawianie jedzenia online. System został zintegrowany z płatnościami online i panelem do zarządzania menu, promocjami oraz zamówieniami w czasie rzeczywistym.",
     longDescription: "Sklep internetowy dla restauracji Bellovito to kompleksowe rozwiązanie e-commerce. Umożliwia klientom łatwe przeglądanie menu i składanie zamówień online. Panel administracyjny pozwala na zarządzanie produktami, kategoriami, promocjami oraz zamówieniami. Zintegrowany system płatności online zapewnia wygodę i bezpieczeństwo transakcji.",
     benefits: [
@@ -46,7 +46,7 @@ export const projects = [
         description: "Intuicyjny panel pozwala na błyskawiczne aktualizacje menu i tworzenie kampanii marketingowych w czasie rzeczywistym."
       }
     ],
-    fullPageImage: "/projects/bellovito-full.png"
+    fullPageImage: "/projects/bellovito_preview.png"
   },
   {
     slug: "ai-analytics-dashboard",
@@ -70,6 +70,6 @@ export const projects = [
         description: "Monitoruj najważniejsze metryki Twojego biznesu w czasie rzeczywistym, aby szybko reagować na zmiany i optymalizować wyniki."
       }
     ],
-    fullPageImage: "/projects/ai-dashboard-full.png"
+    fullPageImage: "/assets/projects/kowalski_preview.png"
   },
 ];
