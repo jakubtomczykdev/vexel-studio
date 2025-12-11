@@ -11,31 +11,39 @@ interface NavbarProps {
 }
 
 export function Navbar({ isScrolled, mobileMenuOpen, setMobileMenuOpen, scrollToSection }: NavbarProps) {
-  const navLinks = [{name: "Home", id:"home"}, {name: "O nas", id:"about"}, {name:"Oferta", id:"services"}, {name: "Kontakt", id:"contact"}];
+  const navLinks = [
+    { name: "Home", id: "home", href: "/#home" },
+    { name: "O nas", id: "about", href: "/#about" },
+    { name: "Oferta", id: "services", href: "/oferta" },
+    { name: "Kontakt", id: "contact", href: "/#contact" }
+  ];
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        isScrolled
-          ? "bg-black/40 backdrop-blur-xl border-b border-emerald-500/10"
-          : ""
-      }`}
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled
+        ? "bg-black/40 backdrop-blur-xl border-b border-emerald-500/10"
+        : ""
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Image src={"/logos/logo.svg"} width={30} height={30} alt="VexelStudio logo"/>
+        <a href="/" className="flex items-center gap-3">
+          <Image src={"/logos/logo.svg"} width={30} height={30} alt="VexelStudio logo" />
           <span className="text-white tracking-tight text-lg font-bold">Vexel Studio</span>
-        </div>
+        </a>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-12">
           {navLinks.map((section) => (
             <a
-              key={section.id}
-              href={`#${section.id}`}
+              key={section.name}
+              href={section.href}
               onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(section.id);
+                if (section.href.startsWith("/#") || section.href.startsWith("#")) {
+                  e.preventDefault();
+                  // Extract id from href
+                  const id = section.href.split("#")[1];
+                  scrollToSection(id);
+                }
               }}
               className="text-slate-100 hover:text-emerald-400 transition-colors text-md tracking-wide"
             >
@@ -73,12 +81,18 @@ export function Navbar({ isScrolled, mobileMenuOpen, setMobileMenuOpen, scrollTo
         <div className="md:hidden bg-black/0 backdrop-blur-xl border-t border-emerald-500/10 px-8 py-4 flex flex-col gap-4">
           {navLinks.map((section) => (
             <a
-              key={section.id}
-              href={`#${section.id}`}
+              key={section.name}
+              href={section.href}
               onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(section.id);
-                setMobileMenuOpen(false);
+                if (section.href.startsWith("/#") || section.href.startsWith("#")) {
+                  e.preventDefault();
+                  const id = section.href.split("#")[1];
+                  scrollToSection(id);
+                  setMobileMenuOpen(false);
+                } else {
+                  // For normal links, just close menu
+                  setMobileMenuOpen(false);
+                }
               }}
               className="text-slate-200 hover:text-emerald-400 transition-colors text-base tracking-wide text-left"
             >
